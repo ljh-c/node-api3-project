@@ -12,7 +12,7 @@ router.post('/', validateUser, async (req, res) => {
   }
   catch (err) {
     console.dir(err);
-    res.status(500).json({ error: "There was an error while saving user to the database." });
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -73,7 +73,12 @@ router.delete('/:id', validateUserId, (req, res) => {
     if (numDeleted !== 1) {
       res.status(500).json({ error: "Unexpected value returned from remove function." });
     } else {
-      res.status(200).json(req.user);
+      User.get().then(users => {
+        res.status(200).json(users);
+      }).catch(err => {
+        console.dir(err);
+        res.status(500).json({ error: "The users could not be retrieved." });
+      });
     }
   }).catch(err => {
     console.dir(err);
