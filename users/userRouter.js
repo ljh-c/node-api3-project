@@ -48,9 +48,10 @@ router.get('/:id/posts', validateUserId, async (req, res) => {
   try {
     const posts = await Post.get();
 
-    const userPosts = posts.filter(post => `${post.user_id}` === req.params.id);
-    // req.params.id is a string
+    const userPosts = posts.filter(post => post.user_id === req.user.id);
     // user_id property of each post is a number
+    // req.params.id is a string
+    // id property of each user is a number
 
     if (userPosts.length === 0) {
       res.status(200).json({ message: "This user has no posts." })
@@ -64,12 +65,34 @@ router.get('/:id/posts', validateUserId, async (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
-  // do your magic!
+router.delete('/:id', validateUserId, (req, res) => {
+  User.remove(req.user.id).then(numDeleted => {
+    if (numDeleted !== 1) {
+      res.status(500).json({ error: "Unexpected value returned from remove function." });
+    } else {
+      res.status(200).json(req.user);
+    }
+  }).catch(err => {
+    console.dir(err);
+    res.status(500).json({ error: "The user could not be removed." });
+  });
 });
 
-router.put('/:id', (req, res) => {
-  // do your magic!
+router.put('/:id', validateUserId, validateUser, async (req, res) => {
+  try {
+    const numUpdated = await User.update(req.user.id, req.body);
+
+    if (numUpdated !== 1) {
+      res.status(500).json({ error: "Unexpected value returned from update function." })
+    } else {
+      const editedUser = await User.getById(req.user.id);
+
+      res.status(200).json(editedUser);
+    }
+  }
+  catch (err) {
+    res.status(500).json({ error: "The user could not be modified." });
+  }
 });
 
 //custom middleware
