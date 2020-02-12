@@ -16,11 +16,14 @@ router.post('/', validateUser, async (req, res) => {
   }
 });
 
-router.post('/:id/posts', validatePost, (req, res) => {
+router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
+  req.body.user_id = req.user.id
+
   Post.insert(req.body).then(newPost => {
     res.status(201).json(newPost);
   }).catch(err => {
     console.dir(err);
+    console.log(req.body);
     res.status(500).json({ error: "There was an error while saving post to the database." });
   });
 });

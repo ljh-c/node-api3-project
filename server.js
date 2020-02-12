@@ -11,7 +11,7 @@ server.get('/', logger, (req, res) => {
 //custom middleware
 
 function logger(req, res, next) {
-  console.log(`[${new Date().toUTCString()}] ${req.method} Request to ${req.originalUrl}`);
+  console.log(`[${new Date().toUTCString()}]\n${req.method} Request to ${req.originalUrl}`);
 
   // console.dir(req.headers);
 
