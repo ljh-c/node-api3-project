@@ -9,11 +9,11 @@ const Posts = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchPosts = () => {
-    return axios.get('http://localhost:5000/api/post');
+    return axios.get('https://post-it-lc.herokuapp.com/api/post');
   };
 
   const fetchUsers = () => {
-    return axios.get('http://localhost:5000/api/user');
+    return axios.get('https://post-it-lc.herokuapp.com/api/user');
   };
 
   const fetchData = () => {

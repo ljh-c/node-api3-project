@@ -13,11 +13,11 @@ const Profile = () => {
   const { id } = useParams();
 
   const fetchPosts = () => {
-    return axios.get(`http://localhost:5000/api/user/${id}/posts`);
+    return axios.get(`https://post-it-lc.herokuapp.com/api/user/${id}/posts`);
   };
 
   const fetchUser = () => {
-    return axios.get(`http://localhost:5000/api/user/${id}`);
+    return axios.get(`https://post-it-lc.herokuapp.com/api/user/${id}`);
   };
 
   const fetchData = () => {
